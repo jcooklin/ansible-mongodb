@@ -1,0 +1,4 @@
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+export http_proxy=http://proxy-us.intel.com:911
+export https_proxy=http://proxy-us.intel.com:911
+export no_proxy=127.0.0.1,localhost,repo-eg01.cps.intel.com

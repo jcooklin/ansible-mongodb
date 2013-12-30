@@ -1,0 +1,33 @@
+---
+# This playbook  deploys the mongodb configurationdb  servers
+
+- name: Create data directory for mongoc configuration server
+  file: path={{ mongodb_datadir_prefix }}/configdb state=directory owner=mongodb group=mongodb
+
+#- name: Create the mongo configuration server startup file
+#  template: src=mongoc.j2 dest=/etc/init.d/mongoc mode=0655
+
+- name: Create the mongo configuration upstart conf file
+  copy: src=roles/mongoc/files/mongoc.conf dest=/etc/init/mongoc.conf 
+
+- name: Create the mongoc link to upstart-job
+  file: state=link src=/lib/init/upstart-job dest=/etc/init.d/mongoc
+
+- name: Create the mongo configuration server file
+  template: src=mongoc.conf.j2 dest=/etc/mongoc.conf mode=0644
+
+
+- name: Copy the keyfile for authentication
+  copy: src=roles/mongod/files/secret dest={{ mongodb_datadir_prefix }}/secret owner=mongodb group=mongodb mode=0400
+
+- name: Start the mongo configuration server service
+  service: name=mongoc state=started
+
+- name: pause
+  pause: seconds=60
+
+- name: add the admin user
+  mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} login_port={{ mongoc_port }} state=present
+  ignore_errors: no
+  tags:
+    - debug

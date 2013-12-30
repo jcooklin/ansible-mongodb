@@ -1,0 +1,6 @@
+127.0.0.1 localhost {{ inventory_hostname }} {{ inventory_hostname_short }}
+{% for host in groups['all'] %}
+{% if host != inventory_hostname %}
+{{ hostvars[host]['ansible_' + iface].ipv4.address }}  {{ host }}  {{ hostvars[host]['inventory_hostname_short'] }}
+{% endif %}
+{% endfor %}

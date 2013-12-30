@@ -1,0 +1,29 @@
+---
+#This Playbook configures the mongos service of mongodb
+
+#- name: Create the mongos startup file
+#  template: src=mongos.j2 dest=/etc/init.d/mongos mode=0655
+
+- name: Create the mongos configuration file
+  template: src=mongos.conf.j2 dest=/etc/mongos.conf mode=0644
+
+- name: Create the mongos upstart conf file
+  copy: src=roles/mongos/files/mongos.conf dest=/etc/init/mongos.conf 
+
+- name: Create the mongos link to upstart-job
+  file: state=link src=/lib/init/upstart-job dest=/etc/init.d/mongos
+
+- name: Copy the keyfile for authentication
+  copy: src=roles/mongod/files/secret dest={{ mongodb_datadir_prefix }}/secret owner=mongodb group=mongodb mode=0400
+
+- name: Start the mongos service
+  service: name=mongos state=started
+
+- name: pause
+  pause: seconds=20
+
+- name: copy the file for shard test 
+  template: src=testsharding.j2 dest=/tmp/testsharding.js
+
+- name: copy the file enable  sharding 
+  template: src=enablesharding.j2 dest=/tmp/enablesharding.js

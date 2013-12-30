@@ -1,0 +1,11 @@
+---
+# Handler for mongod
+
+- name: restart iptables
+  service: name=iptables state=restarted
+
+- name: update locale-gen
+  command: locale-gen
+
+- name: update locale
+  command: update-locale LANG=$lang.UTF-8
