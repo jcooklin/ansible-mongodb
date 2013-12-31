@@ -24,7 +24,7 @@
   service: name=mongoc state=started
 
 - name: pause
-  pause: seconds=60
+  pause: seconds=120
 
 - name: add the admin user
   mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} login_port={{ mongoc_port }} state=present
