@@ -1,6 +1,9 @@
 ---
 # This Playbook runs all the common plays in the deployment 
 
+- name: pause
+  pause: seconds=120
+
 - name: Create /etc/environment 
   copy: src=environment dest=/etc/environment
 
